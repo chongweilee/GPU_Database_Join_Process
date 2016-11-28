@@ -2,6 +2,7 @@
 #include<vector>
 #include<cstdio>
 #include<thread>
+#include<algorithm>
 
 using namespace std;
 
@@ -33,7 +34,6 @@ void bitonic_sort(bool up, int b, int e){
     }
 }
 
-/*
 void bitonic_sort_thread(bool up, int b, int e, int l){
     if(l>0){
         thread fir(bitonic_sort_thread, 1, b, (b+e)/2, l-1);
@@ -47,10 +47,9 @@ void bitonic_sort_thread(bool up, int b, int e, int l){
     }
     bitonic_merge(up, b, e);
 }
-*/
 
 int main(){
-    int n = (1<<10),tmp,k,j;
+    int n = (1<<24),tmp,k,j;
 
     for(int i=1;i<=n;++i){
         x.push_back(i);
@@ -64,6 +63,7 @@ int main(){
         x[j] = tmp;
     }
 
-    bitonic_sort(1, 0, n);
+    bitonic_sort_thread(1, 0, n, 3);
+    //sort(x.begin(),x.end());
     
 }
