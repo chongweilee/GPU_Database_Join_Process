@@ -8,6 +8,7 @@
 using namespace std;
 
 struct data{
+    data(){}
     data(vector<bool>& lb, string line){
         vector<string> col = split(line);
         if(col.size()!=lb.size()){
@@ -42,22 +43,39 @@ bool compare(data& a, data& b){
     return a.key < b.key;
 }
 
-void input(vector<data>& ent, vector<bool>& lb, string f, string cmp){
-    string tmp;
+data input(vector<data>& ent, vector<bool>& lb, string f, string cmp){
+    string tmp,hdr;
     ifstream rin(f);
-    getline(rin,tmp);
-    lb = target(cmp,tmp);
+    getline(rin,hdr);
+    lb = target(cmp,hdr);
     while(getline(rin,tmp)){
         ent.emplace_back(lb,tmp);
     }
     sort(ent.begin(),ent.end(),compare);
+    return data(lb,hdr);
 }
 
 int main(){
     string tmp,cmp;
     vector<bool> lbR,lbS;
+    ofstream jout("J.csv");
+    data hR,hS;
     vector<data> entR,entS;
     cin>>cmp;
-    input(entR,lbR,"R.csv",cmp);
-    input(entS,lbS,"S.csv",cmp);
+    hR = input(entR,lbR,"R.csv",cmp);
+    hS = input(entS,lbS,"S.csv",cmp);
+    cout<<hR.key<<"   "<<hR.val<<endl;
+    cout<<hS.key<<"   "<<hS.val<<endl;
+    int r=0,s=0;
+    while(r<entR.size() && s<entS.size()){
+        cout<<entR[r].key<<"    "<<entS[s].key<<endl;
+        if(entR[r].key<entS[s].key){
+            r+=1;
+        }
+        else if(entR[r].key>entS[s].key){
+            s+=1;
+        }else{
+            jout<<entR[r].key<<","<<entR[r].val<<","<<entS[s].val<<endl;
+        }
+    }
 }
