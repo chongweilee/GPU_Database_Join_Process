@@ -9,6 +9,10 @@ using namespace std;
 
 struct data{
     data(){}
+    data(string k, string v){
+        key = k;
+        val = v;
+    }
     data(vector<bool>& lb, string line){
         vector<string> col = split(line);
         if(col.size()!=lb.size()){
@@ -60,22 +64,28 @@ int main(){
     vector<bool> lbR,lbS;
     ofstream jout("J.csv");
     data hR,hS;
-    vector<data> entR,entS;
+    vector<data> entR,entS,entJ;
     cin>>cmp;
     hR = input(entR,lbR,"R.csv",cmp);
     hS = input(entS,lbS,"S.csv",cmp);
-    cout<<hR.key<<"   "<<hR.val<<endl;
-    cout<<hS.key<<"   "<<hS.val<<endl;
     int r=0,s=0;
     while(r<entR.size() && s<entS.size()){
-        cout<<entR[r].key<<"    "<<entS[s].key<<endl;
+        //cout<<entR[r].key<<"    "<<entS[s].key<<endl;
         if(entR[r].key<entS[s].key){
             r+=1;
         }
         else if(entR[r].key>entS[s].key){
             s+=1;
-        }else{
-            jout<<entR[r].key<<","<<entR[r].val<<","<<entS[s].val<<endl;
         }
+        else{
+            entJ.emplace_back(entR[r].key,entR[r].val+","+entS[s].val);
+            r+=1;
+            s+=1;
+        }
+    }
+
+    jout<<hR.key<<","<<hR.val<<","<<hS.val<<endl;
+    for(int i=0;i<entJ.size();++i){
+        jout<<entJ[i].key<<","<<entJ[i].val<<endl;
     }
 }
