@@ -4,9 +4,13 @@
 #include <fstream>
 #include <algorithm>
 #include <thread>
+#include <chrono>
 #include "util.h"
+
 #define snd (i+1)*entS.size()/tnum-1
+
 using namespace std;
+using namespace std::chrono;
 
 struct data{
     data(){}
@@ -67,8 +71,8 @@ bool comp(data r, data s){
 }
 
 vector<data> entR,entS;
-int tnum=16;
-vector< vector<data> > entJ(tnum);
+int tnum;
+vector< vector<data> > entJ(32);
 void run (int i){
     int s = i*entS.size()/tnum;
     int r = lower_bound(entR.begin(),entR.end(),entS[s])-entR.begin();
@@ -93,11 +97,13 @@ int main(){
     vector<bool> lbR,lbS;
     ofstream jout("J.csv");
     data hR,hS;
-    cin>>cmp;
+    //cin>>cmp;
+    cmp = "ID";
     hR = input(entR,lbR,"R.csv",cmp);
     hS = input(entS,lbS,"S.csv",cmp);
-
     vector<thread> thrd;
+    cin>>tnum;
+    const auto begin = high_resolution_clock::now(); 
     for(int i=0;i<tnum;++i){ 
         thrd.emplace_back(run,i);
     }
@@ -105,6 +111,8 @@ int main(){
     for(int i=0;i<tnum;++i){ 
         thrd[i].join();
     }
+    auto time = high_resolution_clock::now() - begin;
+    std::cout << duration<double, std::nano>(time).count() << ".\n";
     /* 
     jout<<hR.key<<","<<hR.val<<","<<hS.val<<endl;
     for(int i=0;i<entJ.size();++i){
