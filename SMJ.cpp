@@ -90,11 +90,12 @@ int main(){
             }
         }
     }
-
+    /*
     jout<<hR.key<<","<<hR.val<<","<<hS.val<<endl;
     for(int i=0;i<entJ.size();++i){
         for(int j=0;j<entJ[i].size();++j){
             jout<<entJ[i][j].key<<","<<entJ[i][j].val<<endl;
         }
     }
+    */
 }
