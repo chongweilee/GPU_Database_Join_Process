@@ -83,9 +83,10 @@ int main(){
             s+=1;
         }
     }
-
+    /*
     jout<<hR.key<<","<<hR.val<<","<<hS.val<<endl;
     for(int i=0;i<entJ.size();++i){
         jout<<entJ[i].key<<","<<entJ[i].val<<endl;
     }
+    */
 }
