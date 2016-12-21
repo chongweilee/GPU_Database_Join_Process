@@ -27,6 +27,7 @@ struct data{
         }
     }
     string key,val;
+    int join = -1;
 };
 
 vector<bool> target(string sref,string shdr){
@@ -60,32 +61,40 @@ data input(vector<data>& ent, vector<bool>& lb, string f, string cmp){
 }
 
 int main(){
+    int tnum = 16;
+    int r=0,s=0;
+
     string tmp,cmp;
     vector<bool> lbR,lbS;
     ofstream jout("J.csv");
     data hR,hS;
-    vector<data> entR,entS,entJ;
+    vector<data> entR,entS;
+    vector< vector<data> > entJ(tnum);
     cin>>cmp;
     hR = input(entR,lbR,"R.csv",cmp);
     hS = input(entS,lbS,"S.csv",cmp);
-    int r=0,s=0;
-    while(r<entR.size() && s<entS.size()){
-        //cout<<entR[r].key<<"    "<<entS[s].key<<endl;
-        if(entR[r].key<entS[s].key){
-            r+=1;
-        }
-        else if(entR[r].key>entS[s].key){
-            s+=1;
-        }
-        else{
-            entJ.emplace_back(entR[r].key,entR[r].val+","+entS[s].val);
-            r+=1;
-            s+=1;
+
+
+    for(int i=0;i<tnum;++i){ 
+        while(r<entR.size() && s<(i+1)*entS.size()/tnum){
+            //cout<<entR[r].key<<"    "<<entS[s].key<<endl;
+            if(entR[r].key<entS[s].key){
+                r+=1;
+            }
+            else if(entR[r].key>entS[s].key){
+                s+=1;
+            }
+            else{
+                entJ[i].emplace_back(entR[r].key,entR[r].val+","+entS[s].val);
+                r+=1, s+=1;
+            }
         }
     }
 
     jout<<hR.key<<","<<hR.val<<","<<hS.val<<endl;
     for(int i=0;i<entJ.size();++i){
-        jout<<entJ[i].key<<","<<entJ[i].val<<endl;
+        for(int j=0;j<entJ[i].size();++j){
+            jout<<entJ[i][j].key<<","<<entJ[i][j].val<<endl;
+        }
     }
 }
